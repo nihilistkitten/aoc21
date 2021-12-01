@@ -1,4 +1,5 @@
 use itertools::Itertools;
+use utils::aoc_problem;
 
 /// Solve the problem.
 fn solve(input: &'static str) -> usize {
@@ -13,28 +14,4 @@ fn solve(input: &'static str) -> usize {
         .fold(0, |t, (p, c)| if c > p { t + 1 } else { t })
 }
 
-fn main() {
-    println!(
-        "{}",
-        solve(include_str!(concat!(
-            env!("CARGO_MANIFEST_DIR"),
-            "/resources/input.txt"
-        )))
-    );
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn example_input() {
-        assert_eq!(
-            solve(include_str!(concat!(
-                env!("CARGO_MANIFEST_DIR"),
-                "/resources/example.txt"
-            ))),
-            5
-        );
-    }
-}
+aoc_problem!(example_soln = 5);
