@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 /// Preprocess the input string into an iterator of usizes.
 fn preprocess_input(input: &'static str) -> impl Iterator<Item = usize> {
     input
@@ -7,28 +9,30 @@ fn preprocess_input(input: &'static str) -> impl Iterator<Item = usize> {
         .map(|r| r.expect("input is valid usizes"))
 }
 
+/// Group depths by sum of rolling windows of three.
+fn group_by_three(depths: impl Iterator<Item = usize>) -> impl Iterator<Item = usize> {
+    depths.tuple_windows().map(|(p, c, n)| p + c + n)
+}
+
 /// Compute the number of times the sequence increases.
 fn compute_increases(depths: impl Iterator<Item = usize>) -> usize {
-    let mut prev = None;
-    let mut res = 0;
-    for curr in depths {
-        if let Some(prev_depth) = prev {
-            if curr > prev_depth {
-                res += 1;
-            }
-        }
-        prev = Some(curr);
-    }
-    res
+    depths
+        .tuple_windows()
+        .fold(0, |t, (p, c)| if c > p { t + 1 } else { t })
+}
+
+/// Solve the problem.
+fn solve(input: &'static str) -> usize {
+    compute_increases(group_by_three(preprocess_input(input)))
 }
 
 fn main() {
     println!(
         "{}",
-        compute_increases(preprocess_input(include_str!(concat!(
+        solve(include_str!(concat!(
             env!("CARGO_MANIFEST_DIR"),
             "/resources/input.txt"
-        ))))
+        )))
     );
 }
 
@@ -39,11 +43,11 @@ mod tests {
     #[test]
     fn example_input() {
         assert_eq!(
-            compute_increases(preprocess_input(include_str!(concat!(
+            solve(include_str!(concat!(
                 env!("CARGO_MANIFEST_DIR"),
                 "/resources/example.txt"
-            )))),
-            7
+            ))),
+            5
         );
     }
 }
