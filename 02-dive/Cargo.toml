@@ -4,6 +4,5 @@ version = "0.0.0"
 edition = "2021"
 
 [dependencies]
-peg = "0.7.0"
 thiserror = "1.0.30"
 utils = { path = "../utils" }
