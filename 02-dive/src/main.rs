@@ -18,14 +18,18 @@ enum Error {
 struct Position {
     depth: u32,
     horizontal: u32,
+    aim: u32,
 }
 
 impl Position {
     const fn apply(mut self, step: Step) -> Self {
         match step {
-            Step::Up(x) => self.depth -= x,
-            Step::Down(x) => self.depth += x,
-            Step::Forward(x) => self.horizontal += x,
+            Step::Up(x) => self.aim -= x,
+            Step::Down(x) => self.aim += x,
+            Step::Forward(x) => {
+                self.horizontal += x;
+                self.depth += self.aim * x;
+            }
         }
         self
     }
@@ -69,7 +73,7 @@ fn solve(input: &'static str) -> u32 {
         .product()
 }
 
-aoc_problem!(example_soln = 150);
+aoc_problem!(example_soln = 900);
 
 #[cfg(test)]
 mod tests {
