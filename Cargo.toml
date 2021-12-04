@@ -1,2 +1,2 @@
 [workspace]
-members = ["utils", "01-sonar", "02-dive", "03-binary"]
+members = ["utils", "01-sonar", "02-dive", "03-binary", "04-squid"]
