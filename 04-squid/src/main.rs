@@ -77,7 +77,7 @@ fn solve(input: &'static str) -> u32 {
 
     let chunks = inputs.chunks(6);
 
-    let boards: Vec<_> = chunks
+    let mut boards: Vec<_> = chunks
         .into_iter()
         .map(|chunk| {
             Board::from_iterator(
@@ -95,12 +95,20 @@ fn solve(input: &'static str) -> u32 {
 
     for number in lottery_numbers {
         called.push(number);
-        if let Some(score) = boards.iter().find_map(|b| b.bingod(&called)) {
+
+        if boards.len() > 1 {
+            boards.retain(|b| b.bingod(&called).is_none());
+        } else if let Some(score) = boards
+            .iter()
+            .map(|b| b.bingod(&called))
+            .next()
+            .expect("there is a unique last winner")
+        {
             return score;
         }
     }
 
-    unreachable!("the problem guarantees some buard eventually wins")
+    unreachable!("the problem guarantees some board eventually wins")
 }
 
-aoc_problem!(example_soln = 4512);
+aoc_problem!(example_soln = 1924);
