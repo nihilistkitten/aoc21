@@ -1,55 +1,42 @@
 use utils::aoc_problem;
 
-const CYCLE_LEN: u8 = 7;
+const CYCLE_LEN: usize = 7;
 
-#[derive(Clone)]
-struct Lanternfish(u8);
+/// Each index stores the number of lanterfish with that time remaining.
+struct LanternfishSchool([u64; CYCLE_LEN + 2]);
 
-impl Lanternfish {
-    /// Update the lanternfish, returning whether it reproduced.
-    fn update(&mut self) -> bool {
-        if self.0 == 0 {
-            self.0 = CYCLE_LEN - 1;
-            true
-        } else {
-            self.0 -= 1;
-            false
-        }
+impl LanternfishSchool {
+    fn update(&mut self) {
+        self.0.rotate_left(1);
+
+        // fish with state 0 create ones with state 8, which is handled by the rotation, and go to state 6
+        self.0[CYCLE_LEN - 1] += self.0[CYCLE_LEN + 1];
     }
 
-    const fn new(timer: u8) -> Self {
-        Self(timer)
-    }
-
-    const fn reproduce() -> Self {
-        Self(CYCLE_LEN + 1)
+    fn sum(&self) -> u64 {
+        self.0.iter().sum()
     }
 }
 
 /// Solve the problem.
-fn solve(input: &'static str) -> usize {
-    let mut lanternfish: Vec<_> = input
-        .trim_end() // remove trailing `\n`
-        .split(',')
-        .map(str::parse::<u8>)
-        .map(|r| r.expect("input is valid u8s"))
-        .map(Lanternfish::new)
-        .collect();
+fn solve(input: &'static str) -> u64 {
+    let mut lanternfish = LanternfishSchool(
+        input
+            .split(',')
+            .map(str::parse::<usize>)
+            .map(|r| r.expect("input is valid usizes"))
+            .fold([0; CYCLE_LEN + 2], |mut accum, n| {
+                // safety: the input data only includes arguments leq CYCLE_LEN + 1
+                accum[n] += 1;
+                accum
+            }),
+    );
 
-    for _ in 0..80 {
-        let mut count = 0;
-        for fish in &mut lanternfish {
-            if fish.update() {
-                count += 1;
-            }
-        }
-        lanternfish = lanternfish
-            .into_iter()
-            .chain(std::iter::repeat(Lanternfish::reproduce()).take(count))
-            .collect();
+    for _ in 0..256 {
+        lanternfish.update();
     }
 
-    lanternfish.len()
+    lanternfish.sum()
 }
 
-aoc_problem!(example_soln = 5934);
+aoc_problem!(example_soln = 26_984_457_539);
