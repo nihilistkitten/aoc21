@@ -16,11 +16,18 @@ fn solve(input: &'static str) -> u32 {
         .map(|n| {
             initial_positions
                 .iter()
-                .map(|&m| if n > m { n - m } else { m - n })
+                .map(|&m| {
+                    // using fact that sum of first n naturals is n(n+1)/2
+                    if n > m {
+                        (n - m) * (n - m + 1) / 2
+                    } else {
+                        (m - n) * (m - n + 1) / 2
+                    }
+                })
                 .sum()
         })
         .min()
         .expect("numbers in input")
 }
 
-aoc_problem!(example_soln = 37);
+aoc_problem!(example_soln = 168);
