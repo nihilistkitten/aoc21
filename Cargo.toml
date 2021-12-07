@@ -6,5 +6,6 @@ members = [
   "03-binary",
   "04-squid",
   "05-hydrothermal",
-  "06-lanternfish"
+  "06-lanternfish",
+  "07-whales"
 ]
