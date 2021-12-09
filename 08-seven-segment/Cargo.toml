@@ -1,0 +1,10 @@
+[package]
+edition = "2021"
+name = "seven-segment"
+version = "0.0.0"
+
+[dependencies]
+lazy_static = "1.4.0"
+utils = { path = "../utils" }
+
+[features]

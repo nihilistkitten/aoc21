@@ -7,5 +7,6 @@ members = [
   "04-squid",
   "05-hydrothermal",
   "06-lanternfish",
-  "07-whales"
+  "07-whales",
+  "08-seven-segment"
 ]
