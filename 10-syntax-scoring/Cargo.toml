@@ -1,0 +1,9 @@
+[package]
+name = "syntax-scoring"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+itertools = "0.10.3"
+thiserror = "1.0.30"
+utils = { path = "../utils" }
